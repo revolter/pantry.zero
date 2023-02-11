@@ -54,89 +54,8 @@ This is not built yet, but it’s a near term goal.
 We love GitHub, but it’s centralized. *Open source is too important to have a
 single gatekeeper*.
 
-&nbsp;
 
 
-# Contributing
-
-Currently contributing to the pantry is trickier than we’d like. Sorry; we’re
-working on it.
-
-Clone [pantry.extra] and [pantry.core] (the build scripts are in pantry.core).
-
-Browse the `projects` folder for examples of `package.yml`.
-
-Create a new `package.yml` files namespaced as per our current patterns under
-the [`./projects/`] folder. The `package.yml` [specification][pkgspec] can be
-found in our [wiki].
-
-You should verify that your package builds before submitting it:
-
-```sh
-$ export GITHUB_TOKEN=$(gh auth token)
-# ^^ we need a (zero permissions) [PAT] to fetch version info from GitHub
-
-$ export TEA_PANTRY_PATH="$PWD"
-# ^^ this ensures tea know about the pantry you are editing
-
-$ ../pantry.core/scripts/build.ts pkg.com
-# ^^ our build infra is all in pantry.core currently
-```
-
-> Builds typically require the Xcode Command Line Tools
-> (`sudo xcode-select --install`) on macOS and `libc-dev` on Linux.
-
-Packages require a `test` YAML node. This script should thoroughly verify all
-the functionality of the package is working. You can run the test with:
-
-```sh
-../pantry.core/scripts/test.ts pkg.com
-```
-
-*You don’t have access to the sources here*—so eg. `make test` won’t work.
-This is deliberate. We aren't testing the source, we’re testing the
-*implementation*. You want to write a test that *uses the tool*.
-
-tea requires all packages be relocatable and cross platform. Our CI will
-verify this for you. You can check locally by moving the installation from
-`~/.tea` to another tea installation (eg. `~/scratch/tea`§ and running the
-test again.
-
-> § `TEA_PREFIX=~/scratch/tea sh <(curl tea.xyz)`
-
-Now make a pull request! We’ll test on all platforms we support in the PR. If
-it passes both CI and review: we’ll merge!
-
-
-## Packaging Guide & Build Woe
-
-Packaging can be cumbersome.
-Our [wiki] is our packaging knowledge base.
-For other assistance, start a [discussion].
-
-If you like, PR to [pantry.extra] and we’ll help you out.
-
-
-## After Your Contribution
-
-We build “bottles” (tar’d binaries) and upload them to both our centralized
-bottle storage and decentralized [IPFS].
-
-tea automatically builds new releases of packages *as soon as they are
-released* (usually starting the builds within seconds). There is no need to
-submit PRs for updates.
-
-
-
-
-[wiki]: https://github.com/teaxyz/pantry.zero/wiki
 [pantry.core]: https://github.com/teaxyz/pantry.core
 [pantry.extra]: https://github.com/teaxyz/pantry.extra
-[pantry.zero]: https://github.com/teaxyz/pantry.zero
 [tea/cli]: https://github.com/teaxyz/cli
-[discussion]: https://github.com/orgs/teaxyz/discussions
-[PAT]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-[IPFS]: https://ipfs.tech
-[`./projects/`]: https://github.com/teaxyz/panty.core/projects
-[wiki]: (https://github.com/teaxyz/pantry.zero/wiki
-[pkgspec]: https://github.com/teaxyz/pantry.zero/wiki/Structure-of-a-package.yml
